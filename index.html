@@ -344,6 +344,11 @@
   .stat-num.pink   { color: var(--pink); }
   .stat-num.purple { color: var(--purple); }
   .stat-num.green  { color: var(--green); }
+  .stat-num.loading {
+    opacity: 0.25;
+    animation: stat-pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes stat-pulse { 0%,100% { opacity: 0.25; } 50% { opacity: 0.5; } }
   .stat-lbl { font-size: 0.68rem; color: var(--muted); font-weight: 500; line-height: 1.3; }
 
   .sat-row { }
@@ -522,6 +527,13 @@
     font-size: 0.75rem; color: var(--muted);
   }
 
+  .stat-num.loading {
+      opacity: 0.25;
+      animation: stat-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes stat-pulse { 0%,100% { opacity: 0.25; } 50% { opacity: 0.5; } 
+  }
+
   /* ── Confetti ── */
   .confetti-piece {
     position: fixed; top: -10px; pointer-events: none; z-index: 200;
@@ -626,15 +638,15 @@
     </div>
     <div class="stats-grid">
       <div class="stat-box">
-        <div class="stat-num pink" id="stat-visits">—</div>
+        <div class="stat-num pink loading" id="stat-visits">—</div>
         <div class="stat-lbl">Total Visits</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num purple" id="stat-completions">—</div>
+        <div class="stat-num purple loading" id="stat-completions">—</div>
         <div class="stat-lbl">Completions</div>
       </div>
       <div class="stat-box">
-        <div class="stat-num green" id="stat-satisfaction">—</div>
+        <div class="stat-num green loading" id="stat-satisfaction">—</div>
         <div class="stat-lbl">Satisfaction</div>
       </div>
     </div>
@@ -815,16 +827,16 @@ async function storageSet(key, val) {
 
 // ── Boot ──
 async function boot() {
-  // Increment visit count
+  // Load heatmap and stats first (show nothing until ready)
+  let hRes = await storageGet('heatmap');
+  heatData = hRes ? JSON.parse(hRes.value) : {};
+
+  // Increment visit count and only show badge once we have the real number
   let vRes = await storageGet('visits');
   let visits = vRes ? parseInt(vRes.value) + 1 : 1;
   await storageSet('visits', String(visits));
   document.getElementById('visit-text').textContent = `${visits.toLocaleString()} visit${visits !== 1 ? 's' : ''} total`;
   document.getElementById('visit-badge').classList.add('loaded');
-
-  // Load heatmap
-  let hRes = await storageGet('heatmap');
-  heatData = hRes ? JSON.parse(hRes.value) : {};
 
   await refreshStats();
 }
@@ -841,9 +853,13 @@ async function refreshStats() {
   const total  = thumbs.up + thumbs.down;
   const satPct = total > 0 ? Math.round((thumbs.up / total) * 100) : null;
 
-  document.getElementById('stat-visits').textContent      = visits > 0 ? visits.toLocaleString() : '—';
-  document.getElementById('stat-completions').textContent = completions > 0 ? completions : '—';
-  document.getElementById('stat-satisfaction').textContent = satPct !== null ? satPct + '%' : '—';
+  const svEl = document.getElementById('stat-visits');
+  const scEl = document.getElementById('stat-completions');
+  const ssEl = document.getElementById('stat-satisfaction');
+  svEl.textContent = visits > 0 ? visits.toLocaleString() : '—';
+  scEl.textContent = completions > 0 ? completions : '—';
+  ssEl.textContent = satPct !== null ? satPct + '%' : '—';
+  [svEl, scEl, ssEl].forEach(el => el.classList.remove('loading'));
 
 }
 
