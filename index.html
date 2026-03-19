@@ -775,10 +775,10 @@ function renderGrid() {
 
 async function handleClick(idx, letter) {
   if (doneSet.has(letter)) return;
-  hasClickedLetter = true;
   for (let i = 0; i <= idx; i++) doneSet.add(letters[i]);
   currentIdx = idx + 1;
   await recordHeat(letter);
+  await recordCompletion();
   renderGrid();
   updateProgress();
   showPun(letter);
@@ -905,11 +905,6 @@ function setDirection(dir, btn) {
 }
 
 async function resetAll() {
-  // Count as completion only if user actually clicked at least one letter
-  if (hasClickedLetter) {
-    await recordCompletion();
-  }
-  hasClickedLetter = false;
   doneSet.clear(); currentIdx = 0; lastMilestoneShown = -1;
   buildLetters(); renderGrid(); updateProgress(); hidePun();
 }
