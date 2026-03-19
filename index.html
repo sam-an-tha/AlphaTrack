@@ -61,26 +61,21 @@
   /* ── Header ── */
   .header { margin-bottom: 10px; }
   .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
-  .logo-icon {
-    width: 40px; height: 40px; background: var(--pink); border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; flex-shrink: 0;
-    box-shadow: 0 0 20px var(--pink-glow);
-  }
   .logo {
     font-family: 'Unbounded', sans-serif; font-weight: 900;
     font-size: clamp(1.5rem, 4vw, 2.1rem); letter-spacing: -1px;
     color: var(--text); line-height: 1;
   }
   .logo em { font-style: normal; color: var(--pink); }
-  .tagline { color: var(--muted); font-size: 0.86rem; font-style: italic; padding-left: 52px; }
+  .tagline { color: var(--muted); font-size: 0.86rem; font-style: italic; padding-left: 0; }
+  .intro-text { color: var(--muted); font-size: 0.83rem; line-height: 1.65; margin-top: 10px; max-width: 540px; }
 
   .visit-badge {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 12px; border-radius: 100px;
     border: 1px solid var(--purple-dim); background: var(--purple-dim);
     color: var(--purple); font-size: 0.72rem; font-weight: 600;
-    margin-left: 52px; margin-top: 8px;
+    margin-left: 0; margin-top: 8px;
     opacity: 0; transition: opacity 0.4s;
   }
   .visit-badge.loaded { opacity: 1; }
@@ -421,6 +416,112 @@
   }
   .milestone-close:hover { background: #d41f55; transform: scale(0.97); }
 
+
+  /* ── Info button & popup ── */
+  .info-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 50;
+    padding: 8px 16px; border-radius: 100px;
+    border: 1.5px solid var(--border); background: var(--surface);
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .info-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-dim); }
+  .info-btn .info-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--purple);
+  }
+
+  .info-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0; transition: opacity 0.25s;
+  }
+  .info-overlay.show { opacity: 1; pointer-events: all; }
+  .info-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(14,14,20,0.88); backdrop-filter: blur(12px);
+  }
+  .info-card {
+    position: relative; z-index: 2;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px; padding: 32px 36px;
+    max-width: 460px; width: 90%;
+    box-shadow: 0 24px 64px rgba(168,85,247,0.12), 0 2px 8px rgba(0,0,0,0.4);
+    transform: scale(0.9) translateY(10px);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .info-overlay.show .info-card { transform: scale(1) translateY(0); }
+
+  .info-card-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 14px; gap: 12px;
+  }
+  .info-card-title {
+    font-family: 'Unbounded', sans-serif; font-weight: 900;
+    font-size: 1.1rem; letter-spacing: -0.5px; color: var(--text); line-height: 1.3;
+  }
+  .info-card-title em { font-style: normal; color: var(--purple); }
+  .info-close {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    border: 1.5px solid var(--border); background: transparent;
+    color: var(--muted); font-size: 0.85rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s;
+  }
+  .info-close:hover { border-color: var(--pink); color: var(--pink); }
+
+  .info-intro {
+    font-size: 0.88rem; line-height: 1.7; color: var(--muted); margin-bottom: 18px;
+  }
+
+  .info-more-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: none; border: none; cursor: pointer;
+    color: var(--purple); font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; font-weight: 600; padding: 0;
+    transition: opacity 0.18s;
+  }
+  .info-more-btn:hover { opacity: 0.75; }
+  .info-more-arrow {
+    display: inline-block; transition: transform 0.25s;
+    font-size: 0.75rem;
+  }
+  .info-more-arrow.open { transform: rotate(90deg); }
+
+  .info-expanded {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .info-expanded.open { max-height: 600px; }
+
+  .info-section { margin-top: 18px; }
+  .info-section-title {
+    font-family: 'Unbounded', sans-serif; font-weight: 700;
+    font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--pink); margin-bottom: 8px;
+  }
+  .info-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .info-list li {
+    font-size: 0.84rem; color: var(--muted); line-height: 1.5;
+    padding-left: 14px; position: relative;
+  }
+  .info-list li::before {
+    content: '✦'; position: absolute; left: 0;
+    color: var(--purple); font-size: 0.55rem; top: 4px;
+  }
+  .info-built {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;
+  }
+  .info-tag {
+    padding: 4px 12px; border-radius: 100px;
+    border: 1px solid var(--border); background: var(--surface2);
+    font-size: 0.75rem; color: var(--muted);
+  }
+
   /* ── Confetti ── */
   .confetti-piece {
     position: fixed; top: -10px; pointer-events: none; z-index: 200;
@@ -438,7 +539,6 @@
   <!-- Header -->
   <div class="header">
     <div class="logo-row">
-      <div class="logo-icon">⚡</div>
       <div class="logo">Alpha<em>Track</em></div>
     </div>
     <div class="tagline">For the brave souls going through it, one letter at a time.</div>
@@ -538,15 +638,65 @@
         <div class="stat-lbl">Satisfaction</div>
       </div>
     </div>
-    <div class="sat-row">
-      <div class="sat-label">
-        <span>Satisfaction rate (👍 ÷ total votes)</span>
-        <span id="sat-pct-label">—</span>
-      </div>
-      <div class="sat-track"><div class="sat-fill" id="sat-fill"></div></div>
-    </div>
+  </div>
+</div>
   </div>
 
+</div>
+
+
+<!-- Info button (fixed top right) -->
+<button class="info-btn" onclick="openInfo()">
+  <div class="info-dot"></div>
+  More info
+</button>
+
+<!-- Info overlay -->
+<div class="info-overlay" id="info-overlay">
+  <div class="info-backdrop" onclick="closeInfo()"></div>
+  <div class="info-card">
+    <div class="info-card-header">
+      <div class="info-card-title">What's <em>AlphaTrack</em> for?</div>
+      <button class="info-close" onclick="closeInfo()">✕</button>
+    </div>
+    <div class="info-intro">
+      A fun, lightweight progress tracker for anyone working through a mundane task in alphabetical order — think client emails, file processing, data entry, or any job where you're going A to Z (or Z to A).
+    </div>
+    <button class="info-more-btn" onclick="toggleInfoMore()">
+      <span class="info-more-arrow" id="info-arrow">▶</span>
+      View more
+    </button>
+    <div class="info-expanded" id="info-expanded">
+      <div class="info-section">
+        <div class="info-section-title">What it does</div>
+        <ul class="info-list">
+          <li>Click your current letter to log your progress</li>
+          <li>See your completion percentage update in real time</li>
+          <li>Get a cheeky pun for every letter you finish</li>
+          <li>Hit milestones at 25%, 50%, 75% and 100% with a mini breathing break</li>
+          <li>Toggle the heatmap to see which letters get clicked the most</li>
+          <li>Track overall visits, completions and satisfaction across all users</li>
+        </ul>
+      </div>
+      <div class="info-section">
+        <div class="info-section-title">How to use</div>
+        <ul class="info-list">
+          <li>Choose your direction — A → Z or Z → A</li>
+          <li>Click the letter you just completed</li>
+          <li>Keep going until you hit Z (or A!)</li>
+          <li>Click 👍 or 👎 to leave feedback when you're done</li>
+        </ul>
+      </div>
+      <div class="info-section">
+        <div class="info-section-title">Built with</div>
+        <div class="info-built">
+          <span class="info-tag">HTML / CSS / JS</span>
+          <span class="info-tag">Supabase</span>
+          <span class="info-tag">GitHub Pages</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Milestone overlay -->
@@ -591,7 +741,7 @@ const PUNS = {
   W: { emoji: '🌊', text: 'Riding the last <em>W</em>-ave. The shore is in sight!' },
   X: { emoji: '✖️', text: '<em>X</em> marks the spot — and you\'ve nearly found the treasure.' },
   Y: { emoji: '🎊', text: '<em>Y</em>-ikes, you\'re basically done! One more to go. Don\'t you dare stop.' },
-  Z: { emoji: '⚡', text: '<em>Z</em>-ero letters left. You absolute legend. YOU DID IT!!!' },
+  Z: { emoji: '🎯', text: '<em>Z</em>-ero letters left. You absolute legend. YOU DID IT!!!' },
 };
 
 const MILESTONES = {
@@ -610,12 +760,28 @@ let lastMilestoneShown = -1;
 let heatmapOn = false;
 let heatData = {};
 let thumbChoice = null;
-// Track whether the user has made at least one letter click (to qualify for completion)
-let hasClickedLetter = false;
+
+
+// ── Info popup ──
+function openInfo() {
+  document.getElementById('info-overlay').classList.add('show');
+}
+function closeInfo() {
+  document.getElementById('info-overlay').classList.remove('show');
+  // reset expanded state
+  document.getElementById('info-expanded').classList.remove('open');
+  document.getElementById('info-arrow').classList.remove('open');
+}
+function toggleInfoMore() {
+  const expanded = document.getElementById('info-expanded');
+  const arrow    = document.getElementById('info-arrow');
+  expanded.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
 
 // ── Supabase config — replace these two values with yours ──
-const SUPABASE_URL = 'https://vsqsaeyqisfuybhlynmy.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzcXNhZXlxaXNmdXliaGx5bm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5MjIwNjEsImV4cCI6MjA4OTQ5ODA2MX0.w1j3zqlerjP3z_J6xQuY_2TLGRUH2qRExKTBn3PnUys';
+const SUPABASE_URL = 'PASTE_YOUR_PROJECT_URL_HERE';
+const SUPABASE_KEY = 'PASTE_YOUR_ANON_KEY_HERE';
 
 // ── Storage helpers (Supabase REST API) ──
 async function storageGet(key) {
@@ -652,7 +818,7 @@ async function boot() {
   // Increment visit count
   let vRes = await storageGet('visits');
   let visits = vRes ? parseInt(vRes.value) + 1 : 1;
-  await storageSet('visits', String(visits), true);
+  await storageSet('visits', String(visits));
   document.getElementById('visit-text').textContent = `${visits.toLocaleString()} visit${visits !== 1 ? 's' : ''} total`;
   document.getElementById('visit-badge').classList.add('loaded');
 
@@ -678,10 +844,7 @@ async function refreshStats() {
   document.getElementById('stat-visits').textContent      = visits > 0 ? visits.toLocaleString() : '—';
   document.getElementById('stat-completions').textContent = completions > 0 ? completions : '—';
   document.getElementById('stat-satisfaction').textContent = satPct !== null ? satPct + '%' : '—';
-  document.getElementById('sat-fill').style.width          = satPct !== null ? satPct + '%' : '0%';
-  document.getElementById('sat-pct-label').textContent     = satPct !== null
-    ? `${satPct}%  (${thumbs.up} 👍 / ${total} total)`
-    : 'No votes yet';
+
 }
 
 // ── Heatmap ──
@@ -691,7 +854,7 @@ function getHeatLevel(letter) {
 }
 async function recordHeat(letter) {
   heatData[letter] = (heatData[letter] || 0) + 1;
-  await storageSet('heatmap', JSON.stringify(heatData), true);
+  await storageSet('heatmap', JSON.stringify(heatData));
 }
 function toggleHeatmap(on) {
   heatmapOn = on;
@@ -777,12 +940,13 @@ async function handleClick(idx, letter) {
   if (doneSet.has(letter)) return;
   for (let i = 0; i <= idx; i++) doneSet.add(letters[i]);
   currentIdx = idx + 1;
-  await recordHeat(letter);
-  await recordCompletion();
+  // UI updates immediately — storage runs in background
   renderGrid();
   updateProgress();
   showPun(letter);
   checkMilestones();
+  recordHeat(letter);
+  recordCompletion();
 }
 
 function updateProgress() {
@@ -864,17 +1028,17 @@ async function selectThumb(val) {
   thumbs[val]++;
   prevThumb = val;
 
-  await storageSet('thumbs', JSON.stringify(thumbs), true);
+  await storageSet('thumbs', JSON.stringify(thumbs));
   document.getElementById('thumbs-thanks').classList.add('show');
-  await refreshStats();
+  refreshStats(); // non-blocking
 }
 
-// ── Completions: only counted when user clicks Start Over after having clicked at least one letter ──
+// ── Completions: recorded every time a letter is clicked ──
 async function recordCompletion() {
   let cRes = await storageGet('completions');
   let count = cRes ? parseInt(cRes.value) + 1 : 1;
   await storageSet('completions', String(count));
-  await refreshStats();
+  refreshStats(); // non-blocking
 }
 
 // ── Confetti ──
