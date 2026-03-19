@@ -873,7 +873,7 @@ async function selectThumb(val) {
 async function recordCompletion() {
   let cRes = await storageGet('completions');
   let count = cRes ? parseInt(cRes.value) + 1 : 1;
-  await storageSet('completions', String(count), true);
+  await storageSet('completions', String(count));
   await refreshStats();
 }
 
