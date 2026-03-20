@@ -608,7 +608,7 @@
   </div>
 
   <!-- Thumbs (always visible) -->
-  <div class="thumbs-section">
+  <div class="thumbs-section" style="margin-bottom: 14px; display: none;" id="thumbs-section">
     <div class="thumbs-header">
       <div class="thumbs-title">Enjoying <em>AlphaTrack?</em></div>
       <div class="thumbs-sub">Let us know — it helps us improve 💜</div>
@@ -627,7 +627,7 @@
   </div>
 
   <!-- Live Stats (last) -->
-  <div class="stats-section" style="margin-top: 14px;">
+  <div class="stats-section" style="margin-top: 14px; display: none;" id="stats-section">
     <div class="stats-title">
       <span>📊 Live Stats</span>
       <span class="stats-live"><span class="stats-live-dot"></span> Live</span>
@@ -959,6 +959,8 @@ async function handleClick(idx, letter) {
   checkMilestones();
   recordHeat(letter);
   recordCompletion();
+  document.getElementById('stats-section').style.display = 'block';
+  document.getElementById('thumbs-section').style.display = 'block';
 }
 
 function updateProgress() {
@@ -1083,6 +1085,8 @@ function setDirection(dir, btn) {
 async function resetAll() {
   doneSet.clear(); currentIdx = 0; lastMilestoneShown = -1;
   buildLetters(); renderGrid(); updateProgress(); hidePun();
+  document.getElementById('stats-section').style.display = 'none';
+  document.getElementById('thumbs-section').style.display = 'none';
 }
 
 init();
