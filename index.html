@@ -549,6 +549,7 @@
       <div class="logo">Alpha<em>Track</em></div>
     </div>
     <div class="tagline">For the brave souls going through it, one letter at a time.</div>
+    <div class="intro-text">A fun, lightweight progress tracker for anyone working through a mundane task in alphabetical order — think client emails, file processing, data entry, or any job where you're going A to Z (or Z to A).</div>
     <div class="visit-badge" id="visit-badge">
       <div class="visit-dot"></div>
       <span id="visit-text">Loading…</span>
@@ -588,7 +589,7 @@
   <div class="heatmap-row">
     <div class="grid-label">Tap your current letter to log progress</div>
     <label class="heatmap-toggle">
-      <input type="checkbox" id="heatmap-chk" onchange="toggleHeatmap(this.checked)">
+      <input type="checkbox" id="heatmap-chk" onchange="toggleHeatmap(this.checked)" checked>
       <div class="toggle-pill"></div>
       <span>Heatmap</span>
     </label>
@@ -764,7 +765,7 @@ let letters = [];
 let doneSet = new Set();
 let currentIdx = 0;
 let lastMilestoneShown = -1;
-let heatmapOn = false;
+let heatmapOn = true;
 let heatData = {};
 let thumbChoice = null;
 
